@@ -29,6 +29,11 @@
     var minSpeed = 1;
     var player = { x: canvas.width / 2 - 15, y: canvas.height - 110, w: 30, h: 54, flash: 0 };
     var traffic = [];
+    var trafficModels = [
+      { name: 'ALTO', color: '#90a4ae', roof: '#cfd8dc', light: '#ffe082' },
+      { name: 'COROLLA', color: '#b0bec5', roof: '#eceff1', light: '#ffd54f' },
+      { name: 'CIVIC', color: '#ffffff', roof: '#e0e0e0', light: '#ffcc80' }
+    ];
     var running = false;
     var ended = false;
     var startTime = 0;
@@ -60,12 +65,13 @@
       var lane = Math.floor(Math.random() * laneCount);
       var carW = 28;
       var carH = 50;
+      var model = trafficModels[Math.floor(Math.random() * trafficModels.length)];
       traffic.push({
         x: lane * laneWidth + (laneWidth - carW) / 2,
         y: -carH - 20,
         w: carW,
         h: carH,
-        color: ['#ff7043', '#29b6f6', '#ab47bc', '#66bb6a'][Math.floor(Math.random() * 4)]
+        model: model
       });
     }
 
@@ -92,13 +98,24 @@
       ctx.setLineDash([]);
     }
 
-    function drawCar(x, y, w, h, color, isPlayer) {
-      ctx.fillStyle = color;
+    function drawCar(x, y, w, h, style, isPlayer) {
+      ctx.fillStyle = style.color;
       ctx.fillRect(x, y, w, h);
-      ctx.fillStyle = '#111';
-      ctx.fillRect(x + 5, y + 8, w - 10, 14);
-      ctx.fillStyle = '#ffd54f';
-      ctx.fillRect(x + 4, y + h - 8, w - 8, 4);
+      ctx.fillStyle = style.roof;
+      ctx.fillRect(x + 4, y + 6, w - 8, 14);
+      ctx.fillStyle = '#1f1f1f';
+      ctx.fillRect(x + 6, y + 8, w - 12, 10);
+      ctx.fillStyle = style.light;
+      ctx.fillRect(x + 3, y + h - 7, w - 6, 3);
+      ctx.fillStyle = '#0d0d0d';
+      ctx.fillRect(x + 3, y + 2, w - 6, 2);
+
+      if (!isPlayer && style.name) {
+        ctx.fillStyle = '#101010';
+        ctx.font = 'bold 8px Arial, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(style.name, x + w / 2, y + h - 12);
+      }
 
       if (isPlayer && player.flash > 0) {
         ctx.fillStyle = 'rgba(255, 60, 60, 0.6)';
@@ -167,8 +184,8 @@
       speedEl.textContent = speed.toFixed(1);
 
       drawRoad(dt);
-      traffic.forEach(function (enemy) { drawCar(enemy.x, enemy.y, enemy.w, enemy.h, enemy.color, false); });
-      drawCar(player.x, player.y, player.w, player.h, '#ffca28', true);
+      traffic.forEach(function (enemy) { drawCar(enemy.x, enemy.y, enemy.w, enemy.h, enemy.model, false); });
+      drawCar(player.x, player.y, player.w, player.h, { color: '#ffffff', roof: '#f5f5f5', light: '#ffeb3b', name: 'CIVIC' }, true);
       if (player.flash > 0) player.flash -= 1 * dt;
 
       window.requestAnimationFrame(update);
