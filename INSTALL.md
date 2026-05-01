@@ -19,6 +19,10 @@ Use this plugin file structure exactly as provided in this repository.
    ```text
    [speedx_car_game]
    ```
+   or the shorter alias:
+   ```text
+   [speedx_game]
+   ```
 
 ## Important
 

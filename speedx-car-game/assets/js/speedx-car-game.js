@@ -98,23 +98,53 @@
       ctx.setLineDash([]);
     }
 
+    function roundedRect(x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    }
+
     function drawCar(x, y, w, h, style, isPlayer) {
+      roundedRect(x, y, w, h, 7);
       ctx.fillStyle = style.color;
-      ctx.fillRect(x, y, w, h);
+      ctx.fill();
+
+      roundedRect(x + 3, y + 5, w - 6, 17, 5);
       ctx.fillStyle = style.roof;
-      ctx.fillRect(x + 4, y + 6, w - 8, 14);
-      ctx.fillStyle = '#1f1f1f';
-      ctx.fillRect(x + 6, y + 8, w - 12, 10);
+      ctx.fill();
+
+      roundedRect(x + 5, y + 7, w - 10, 12, 4);
+      ctx.fillStyle = '#232323';
+      ctx.fill();
+
+      ctx.fillStyle = '#111';
+      ctx.fillRect(x - 2, y + 10, 3, 11);
+      ctx.fillRect(x + w - 1, y + 10, 3, 11);
+      ctx.fillRect(x - 2, y + h - 19, 3, 11);
+      ctx.fillRect(x + w - 1, y + h - 19, 3, 11);
+
       ctx.fillStyle = style.light;
-      ctx.fillRect(x + 3, y + h - 7, w - 6, 3);
-      ctx.fillStyle = '#0d0d0d';
-      ctx.fillRect(x + 3, y + 2, w - 6, 2);
+      ctx.fillRect(x + 4, y + h - 6, w - 8, 3);
+      ctx.fillStyle = '#fafafa';
+      ctx.fillRect(x + 4, y + 3, w - 8, 2);
+
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.25)';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(x + 1, y + 1, w - 2, h - 2);
 
       if (!isPlayer && style.name) {
-        ctx.fillStyle = '#101010';
+        ctx.fillStyle = '#121212';
         ctx.font = 'bold 8px Arial, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText(style.name, x + w / 2, y + h - 12);
+        ctx.fillText(style.name, x + w / 2, y + h - 11);
       }
 
       if (isPlayer && player.flash > 0) {

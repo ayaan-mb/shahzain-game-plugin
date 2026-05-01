@@ -20,6 +20,7 @@ if (!class_exists('SpeedX_Car_Game_Plugin')) {
         public function __construct() {
             add_action('wp_enqueue_scripts', array($this, 'register_assets'));
             add_shortcode('speedx_car_game', array($this, 'render_shortcode'));
+            add_shortcode('speedx_game', array($this, 'render_shortcode'));
         }
 
         public function register_assets() {
